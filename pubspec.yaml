@@ -1,0 +1,46 @@
+name: eye_screening_app
+description: "A new Flutter project."
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.10.1
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  cupertino_icons: ^1.0.8
+  
+  # Firebase
+  firebase_core: ^3.8.1
+  firebase_auth: ^5.3.3
+  cloud_firestore: ^5.5.2
+  
+  # Camera and Image
+  image_picker: ^1.1.2
+  camera: ^0.11.0+2
+
+  # 🔐 Permission (ต้องมี ไม่งั้นกล้องเด้ง)
+  permission_handler: ^11.3.1
+  
+  # Email
+  mailer: ^6.1.2
+  
+  # Other utilities
+  intl: ^0.19.0
+  flutter_dotenv: ^5.2.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^6.0.0
+
+flutter:
+  uses-material-design: true
+
+  # ถ้ามีไฟล์ .env
+  # assets:
+  #   - .env

@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "512193286712",
+    "project_id": "eye-screening-app-fd399",
+    "storage_bucket": "eye-screening-app-fd399.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:512193286712:android:a0023aeb81c1af06118ccd",
+        "android_client_info": {
+          "package_name": "com.example.eye_screening_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "512193286712-ts4f7r3gq1269l1p656oi16ma7vpuk8r.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBwYiWdU8Vz-vJ9R9hknlammTh4aMValr8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "512193286712-ts4f7r3gq1269l1p656oi16ma7vpuk8r.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
