@@ -6,6 +6,7 @@ class TestResult {
   final bool isRisk;
   final String testDate;
   final DateTime timestamp;
+  final bool isDeleted;
 
   TestResult({
     required this.id,
@@ -15,6 +16,7 @@ class TestResult {
     required this.isRisk,
     required this.testDate,
     required this.timestamp,
+    this.isDeleted = false,
   });
 
   factory TestResult.fromMap(Map<String, dynamic> map, String id) {
@@ -28,6 +30,7 @@ class TestResult {
       timestamp: map['timestamp'] != null
           ? (map['timestamp'] as dynamic).toDate()
           : DateTime.now(),
+      isDeleted: map['isDeleted'] ?? false,
     );
   }
 
@@ -39,6 +42,7 @@ class TestResult {
       'isRisk': isRisk,
       'testDate': testDate,
       'timestamp': timestamp,
+      'isDeleted': isDeleted,
     };
   }
 }

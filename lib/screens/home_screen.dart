@@ -15,6 +15,18 @@ class HomeScreen extends StatelessWidget {
           style: TextStyle(color: Colors.white),
         ),
         centerTitle: true,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.logout, color: Colors.white),
+            onPressed: () {
+              Navigator.pushNamedAndRemoveUntil(
+                context,
+                '/login',
+                (route) => false,
+              );
+            },
+          ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -50,14 +62,12 @@ class HomeScreen extends StatelessWidget {
             const SizedBox(height: 16),
             _buildMenuCard(
               context,
-              icon: Icons.fingerprint,
-              title: 'ข้อมูล',
+              icon: Icons.settings,
+              title: 'ตั้งค่า',
               color: Colors.teal.shade100,
               iconColor: Colors.teal.shade700,
               onTap: () {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('ข้อมูลผู้ใช้')),
-                );
+                Navigator.pushNamed(context, '/settings');
               },
             ),
           ],

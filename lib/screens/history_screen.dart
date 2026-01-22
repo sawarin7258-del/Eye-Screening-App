@@ -12,16 +12,16 @@ class HistoryScreen extends StatefulWidget {
 class _HistoryScreenState extends State<HistoryScreen> {
   final FirestoreService _firestoreService = FirestoreService();
   final AuthService _authService = AuthService();
-  late Future<List<Map<String, dynamic>>> _historyFuture;
+  late Stream<List<Map<String, dynamic>>> _historyStream;
 
   @override
   void initState() {
     super.initState();
     final currentUser = _authService.currentUser;
     if (currentUser != null) {
-      _historyFuture = _firestoreService.getTestHistory(currentUser.uid);
+      _historyStream = _firestoreService.getTestHistoryStream(currentUser.uid);
     } else {
-      _historyFuture = Future.value([]);
+      _historyStream = Stream.value([]);
     }
   }
 
@@ -42,8 +42,8 @@ class _HistoryScreenState extends State<HistoryScreen> {
           onPressed: () => Navigator.pop(context),
         ),
       ),
-      body: FutureBuilder<List<Map<String, dynamic>>>(
-        future: _historyFuture,
+      body: StreamBuilder<List<Map<String, dynamic>>>(
+        stream: _historyStream,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(
@@ -87,6 +87,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
             itemCount: historyData.length,
             itemBuilder: (context, index) {
               final item = historyData[index];
+              final documentId = item['id'] as String? ?? '';
               final isRisk = item['isRisk'] as bool? ?? false;
               final testDate = item['testDate'] as String? ?? '-';
               final leftEyeResult = item['leftEyeResult'] as String? ?? '-';
@@ -140,26 +141,84 @@ class _HistoryScreenState extends State<HistoryScreen> {
                             ],
                           ),
                         ),
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 12,
-                            vertical: 8,
-                          ),
-                          decoration: BoxDecoration(
-                            color: isRisk
-                                ? Colors.red.shade100
-                                : Colors.green.shade100,
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: Text(
-                            isRisk ? 'เสี่ยง' : 'ปกติ',
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w600,
-                              color: isRisk ? Colors.red : Colors.green,
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 12,
+                              vertical: 8,
+                            ),
+                            decoration: BoxDecoration(
+                              color: isRisk
+                                  ? Colors.red.shade100
+                                  : Colors.green.shade100,
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: Text(
+                              isRisk ? 'เสี่ยง' : 'ปกติ',
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w600,
+                                color: isRisk ? Colors.red : Colors.green,
+                              ),
                             ),
                           ),
-                        ),
+                          const SizedBox(width: 8),
+                          IconButton(
+                            icon: const Icon(Icons.delete_outline,
+                                color: Colors.grey),
+                            onPressed: () async {
+                              final confirmed = await showDialog<bool>(
+                                context: context,
+                                builder: (context) => AlertDialog(
+                                  title: const Text('ลบประวัติ'),
+                                  content: const Text(
+                                      'คุณต้องการลบประวัติการตรวจนี้ใช่ไหม? (สามารถกู้คืนได้ในตั้งค่า)'),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () =>
+                                          Navigator.pop(context, false),
+                                      child: const Text('ยกเลิก'),
+                                    ),
+                                    TextButton(
+                                      onPressed: () =>
+                                          Navigator.pop(context, true),
+                                      child: const Text('ลบ',
+                                          style: TextStyle(color: Colors.red)),
+                                    ),
+                                  ],
+                                ),
+                              );
+
+                              if (confirmed == true) {
+                                try {
+                                  final currentUser = _authService.currentUser;
+                                  if (currentUser != null &&
+                                      documentId.isNotEmpty) {
+                                    await _firestoreService
+                                        .softDeleteTestResult(
+                                      currentUser.uid,
+                                      documentId,
+                                    );
+                                    // _refreshHistory(); // Stream updates automatically
+                                    if (mounted) {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        const SnackBar(
+                                            content: Text('ลบรายการเรียบร้อย')),
+                                      );
+                                    }
+                                  }
+                                } catch (e) {
+                                  if (mounted) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                          content:
+                                              Text('เกิดข้อผิดพลาด: $e')),
+                                    );
+                                  }
+                                }
+                              }
+                            },
+                          ),
                       ],
                     ),
                   ],

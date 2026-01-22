@@ -12,6 +12,8 @@ import 'screens/result_normal_screen.dart';
 import 'screens/result_risk_screen.dart';
 import 'screens/history_screen.dart';
 import 'screens/knowledge_screen.dart';
+import 'screens/settings_screen.dart';
+import 'screens/trash_history_screen.dart';
 
 import 'dart:io';
 
@@ -72,6 +74,8 @@ class EyeScreeningApp extends StatelessWidget {
         },
         '/history': (context) => const HistoryScreen(),
         '/knowledge': (context) => const KnowledgeScreen(),
+        '/settings': (context) => const SettingsScreen(),
+        '/trash': (context) => const TrashHistoryScreen(),
       },
     );
   }
