@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../services/firestore_service.dart';
 import '../services/auth_service.dart';
+import '../database/database_helper.dart';
 
 class HistoryScreen extends StatefulWidget {
   const HistoryScreen({super.key});
@@ -24,6 +25,12 @@ class _HistoryScreenState extends State<HistoryScreen> {
       _historyStream = Stream.value([]);
     }
   }
+
+  Future<void> loadHistory() async {
+  final data = await DatabaseHelper.instance.getAll();
+  debugPrint(data.toString());
+}
+
 
   @override
   Widget build(BuildContext context) {
